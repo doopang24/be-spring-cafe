@@ -14,6 +14,7 @@ public class Article {
     private User writer;
     private String title;
     private String contents;
+    private boolean deleted;
 
     protected Article() {}
 
@@ -21,6 +22,7 @@ public class Article {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
+        this.deleted = false;
     }
 
     public Long getId() {
@@ -50,5 +52,9 @@ public class Article {
     public void update(String title, String contents) {
         this.title = title;
         this.contents = contents;
+    }
+
+    public void markAsDeleted() {
+        this.deleted = true;
     }
 }

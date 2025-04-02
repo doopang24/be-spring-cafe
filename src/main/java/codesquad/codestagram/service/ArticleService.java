@@ -28,11 +28,12 @@ public class ArticleService {
     }
 
     public List<Article> findAllArticle() {
-        return articleRepository.findAll();
+        return articleRepository.findByDeletedFalse();
     }
 
     public void deleteArticle(Long id) {
-        articleRepository.deleteById(id);
+        Article article = findOneArticle(id).get();
+        article.markAsDeleted();
     }
 
     // JPA 가 엔티티의 변경 사항을 DB 에 자동으로 반영하려면 @Transactional 이 필요
