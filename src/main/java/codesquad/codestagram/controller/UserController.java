@@ -57,8 +57,8 @@ public class UserController {
         User user = userService.findOneUser(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
         User loginUser = (User) session.getAttribute(LOGIN_USER);
-        if(!user.equals(loginUser)) {
-            throw new UserNotFoundException(userId);
+        if (loginUser == null) {
+            return "redirect:/user/login";
         }
         model.addAttribute("user", user);
         return "user/profile";
