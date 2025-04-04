@@ -31,6 +31,7 @@ public class Article {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
+        this.deleted = false;
     }
 
     public Long getId() {

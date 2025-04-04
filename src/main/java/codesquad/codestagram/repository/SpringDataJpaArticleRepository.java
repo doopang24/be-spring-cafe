@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface SpringDataJpaArticleRepository extends JpaRepository<Article, Long> {
 
-    List<Article> findByDeletedFalse();
+    List<Article> findAllByDeletedFalse();
 
     @Query("""
         SELECT DISTINCT a FROM Article a
