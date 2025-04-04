@@ -1,7 +1,9 @@
 package codesquad.codestagram.controller;
 
 import codesquad.codestagram.domain.Article;
+import codesquad.codestagram.domain.Reply;
 import codesquad.codestagram.domain.User;
+import codesquad.codestagram.exception.ArticleNotFoundException;
 import codesquad.codestagram.exception.UserNotFoundException;
 import codesquad.codestagram.service.ArticleService;
 import jakarta.servlet.http.HttpSession;
@@ -53,12 +55,14 @@ public class ArticleController {
     }
 
     @GetMapping("/articles/{id}")
-    public String show(@PathVariable Long id, Model model, HttpSession session) {
+    public String showArticle(@PathVariable Long id, Model model, HttpSession session) {
         User loginUser = (User) session.getAttribute(LOGIN_USER);
         if(loginUser == null) {
             return "redirect:/user/login";
         }
-        Article article = articleService.findOneArticle(id).get();
+        Article article = articleService.findArticleWithReplies(id)
+                .orElseThrow(() -> new ArticleNotFoundException());
+//        if(article.isD)
         model.addAttribute("article", article);
         return "qna/show";
     }
@@ -67,8 +71,8 @@ public class ArticleController {
     public String showUpdateForm(@PathVariable Long id, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
         Article article = articleService.findOneArticle(id).get();
         User writer = article.getWriter();
-        User sessionUser = (User) session.getAttribute(LOGIN_USER);
-        if(!writer.equals(sessionUser)) {
+        User loginUser = (User) session.getAttribute(LOGIN_USER);
+        if(!writer.equals(loginUser)) {
             redirectAttributes.addFlashAttribute("error", "게시글의 작성자만 수정할 수 있습니다.");
             return "redirect:/articles/" + id;
         }
@@ -83,8 +87,8 @@ public class ArticleController {
                          HttpSession session) {
         Article article = articleService.findOneArticle(id).get();
         User writer = article.getWriter();
-        User sessionUser = (User) session.getAttribute(LOGIN_USER);
-        if(!writer.equals(sessionUser)) {
+        User loginUser = (User) session.getAttribute(LOGIN_USER);
+        if(!writer.equals(loginUser)) {
             throw new UserNotFoundException(writer.getUserId());
         }
         articleService.update(id, title, contents);
@@ -96,8 +100,8 @@ public class ArticleController {
     public String delete(@PathVariable Long id, HttpSession session, RedirectAttributes redirectAttributes) {
         Article article = articleService.findOneArticle(id).get();
         User writer = article.getWriter();
-        User sessionUser = (User) session.getAttribute(LOGIN_USER);
-        if(!writer.equals(sessionUser)) {
+        User loginUser = (User) session.getAttribute(LOGIN_USER);
+        if(!writer.equals(loginUser)) {
             redirectAttributes.addFlashAttribute("error", "게시글의 작성자만 삭제할 수 있습니다.");
             return "redirect:/articles/" + id;
             // 게시글의 상세 페이지로 이동하기 위해 id를 붙여서 보낸다
