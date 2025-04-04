@@ -13,6 +13,7 @@ public class Reply {
     private User writer;
 
     @ManyToOne
+    @JoinColumn(name = "article_id")
     private Article article;
 
     private String contents;
@@ -29,5 +30,41 @@ public class Reply {
 
     public void markAsDeleted() {
         this.deleted = true;
+    }
+
+    public String getContents() {
+        return contents;
+    }
+
+    public void setContents(String contents) {
+        this.contents = contents;
+    }
+
+    public User getWriter() {
+        return writer;
+    }
+
+    public void setWriter(User writer) {
+        this.writer = writer;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Article getArticle() {
+        return article;
+    }
+
+    public void setArticle(Article article) {
+        this.article = article;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
     }
 }
