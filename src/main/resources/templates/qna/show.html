@@ -73,9 +73,6 @@
                                     <div class="article-util">
                                         <ul class="article-util-list" th:if="${reply.writer.id == session.loginUser.id}">
                                             <li>
-<!--                                                <a th:href="@{/questions/{id}/answers/{answerId}/form(id=${article.id}, answerId=${reply.id})}" class="link-modify-article">수정</a>-->
-<!--                                            </li>-->
-<!--                                            <li>-->
                                                 <a href="#" class="link-modify-article"
                                                    th:attr="data-reply-id=${reply.id}, data-article-id=${article.id}"
                                                    onclick="showEditForm(this); return false;">수정</a>
@@ -150,7 +147,6 @@
                 <button type="submit" class="btn btn-primary btn-sm">수정 완료</button>
             </form>
         `;
-
         article.querySelector(".article-doc").innerHTML = formHTML;
     }
 </script>

@@ -35,9 +35,10 @@ public class ArticleService {
     }
 
     public List<Article> findAllArticle() {
-        return articleRepository.findByDeletedFalse();
+        return articleRepository.findAllByDeletedFalse();
     }
 
+    @Transactional
     public void deleteArticle(Long id) {
         Article article = findOneArticle(id).get();
         if(hasReply(article)) {
