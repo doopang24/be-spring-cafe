@@ -35,3 +35,22 @@ ARTICLES 테이블의 writer는 USER 테이블의 name을 참조하는 외래키
 
 하나의 엔티티가 여러 개의 엔티티를 소유한다.
 - 하나의 user가 여러 개의 article 을 작성한다.
+
+### HiddenHttpMethodFilter
+
+Spring MVC 는 기본적으로 GET, POST 만 제공하기 때문에, DELETE, PUT 등을 사용하고 싶으면 HiddenHttpMethodFilter 를 설정 파일에 등록해야 한다.
+
+
+<br>
+
+## Trouble Shooting
+
+### boolean 컬럼은 NOT NULL 제약 조건이 걸려있다.
+
+상황
+: soft delete를 구현하기 위해 Article 클래스에 boolean 타입의 deleted 필드를 추가했다. 따라서 DB 는 기존에 있던 데이터에도 deleted 칼럼을 추가하려고 한다.
+그런데 기존 데이터에는 deleted 칼럼이 없기 때문에 null 이 들어가게 된다. 그러나 boolean 컬럼이 NOT NULL 제약 조건이 걸려 있어서 오류가 발생한다.
+
+해결
+: 애플리케이션을 중지하고, H2 콘솔로 가서 수동으로 칼럼을 추가한다.
+sql : ALTER TABLE articles ADD COLUMN deleted BOOLEAN DEFAULT FALSE NOT NULL;
