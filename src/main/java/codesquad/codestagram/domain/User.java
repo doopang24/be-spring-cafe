@@ -26,6 +26,8 @@ public class User {
     // JPA 용 기본 생성자
     protected User() {}
 
+    public Long getId() { return id; }
+
     public String getUserId() {
         return userId;
     }

@@ -2,6 +2,9 @@ package codesquad.codestagram.domain;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "ARTICLES")
 public class Article {
@@ -15,6 +18,12 @@ public class Article {
     private String title;
     private String contents;
     private boolean deleted;
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reply> replies = new ArrayList<>();
+
+    // mappedBy = "article" : Reply 클래스에 있는 article 필드가 이 관계의 주인이다
+    // cascade = CascadeType.ALL : Article을 저장, 삭제 업데이트 할 때 그에 딸린 Reply 들도 함께 처리된다
+    // orphanRemoval = true : replies 리스트에서 Reply 를 제거하면 해당 Reply 는 DB 에서도 제거된다
 
     protected Article() {}
 
@@ -22,7 +31,6 @@ public class Article {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
-        this.deleted = false;
     }
 
     public Long getId() {
@@ -56,5 +64,14 @@ public class Article {
 
     public void markAsDeleted() {
         this.deleted = true;
+    }
+
+    public List<Reply> getReplies() {
+        return replies;
+    }
+
+    public void addReply(Reply reply) {
+        this.replies.add(reply);
+        reply.setArticle(this);
     }
 }
